@@ -1,45 +1,82 @@
-
-import json
 import boto3
 import uuid
-from datetime import datetime
+import json
+import os
 
-ec2 = boto3.client('ec2')
-dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('VPCMetadata')
+# AWS clients
+dynamodb = boto3.resource("dynamodb")
+ec2 = boto3.client("ec2")
 
-def lambda_handler(event, context):
+# DynamoDB table name from environment variable
+TABLE_NAME = os.environ.get("TABLE_NAME")
+
+def create_vpc(event, context):
+    """
+    Create a VPC with subnets and store the details in DynamoDB.
+    """
     try:
-        vpc = ec2.create_vpc(CidrBlock='10.0.0.0/16')
-        vpc_id = vpc['Vpc']['VpcId']
-        ec2.modify_vpc_attribute(VpcId=vpc_id, EnableDnsSupport={'Value': True})
-        ec2.modify_vpc_attribute(VpcId=vpc_id, EnableDnsHostnames={'Value': True})
+        body = json.loads(event.get("body", "{}"))
+        vpc_cidr = body.get("VpcCidr", "10.0.0.0/16")
+        subnets = body.get("Subnets", [])
 
-        subnets = []
-        azs = ec2.describe_availability_zones()['AvailabilityZones'][:2]
+        # Create a VPC
+        vpc_response = ec2.create_vpc(CidrBlock=vpc_cidr)
+        vpc = vpc_response["Vpc"]
+        vpc_id = vpc["VpcId"]
 
-        for i, az in enumerate(azs):
-            subnet = ec2.create_subnet(
+        # Enable DNS features for the VPC
+        ec2.modify_vpc_attribute(VpcId=vpc_id, EnableDnsSupport={"Value": True})
+        ec2.modify_vpc_attribute(VpcId=vpc_id, EnableDnsHostnames={"Value": True})
+
+        # Create Subnets
+        subnet_ids = []
+        for subnet in subnets:
+            subnet_response = ec2.create_subnet(
                 VpcId=vpc_id,
-                CidrBlock=f'10.0.{i}.0/24',
-                AvailabilityZone=az['ZoneName']
+                CidrBlock=subnet["CidrBlock"],
+                AvailabilityZone=subnet["AvailabilityZone"]
             )
-            subnets.append(subnet['Subnet']['SubnetId'])
+            subnet_ids.append(subnet_response["Subnet"]["SubnetId"])
 
-        record = {
-            'id': str(uuid.uuid4()),
-            'vpc_id': vpc_id,
-            'subnets': subnets,
-            'created_at': datetime.utcnow().isoformat()
-        }
-        table.put_item(Item=record)
+        # Save VPC and subnet details in DynamoDB
+        table = dynamodb.Table(TABLE_NAME)
+        record_id = str(uuid.uuid4())
+        table.put_item(
+            Item={
+                "ResourceId": record_id,
+                "VpcId": vpc_id,
+                "VpcCidr": vpc_cidr,
+                "Subnets": subnet_ids
+            }
+        )
 
         return {
-            'statusCode': 201,
-            'body': json.dumps(record)
+            "statusCode": 201,
+            "body": json.dumps({
+                "ResourceId": record_id,
+                "VpcId": vpc_id,
+                "VpcCidr": vpc_cidr,
+                "Subnets": subnet_ids
+            })
         }
+
     except Exception as e:
+        print(e)
+        return {"statusCode": 500, "body": json.dumps({"error": str(e)})}
+
+def get_resources(event, context):
+    """
+    Fetch all VPC and subnet details from DynamoDB.
+    """
+    try:
+        table = dynamodb.Table(TABLE_NAME)
+        results = table.scan()
+
         return {
-            'statusCode': 500,
-            'body': json.dumps({'error': str(e)})
+            "statusCode": 200,
+            "body": json.dumps(results["Items"])
         }
+
+    except Exception as e:
+        print(e)
+        return {"statusCode": 500, "body": json.dumps({"error": str(e)})}
