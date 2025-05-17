@@ -1,0 +1,91 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Globals:
+  Function:
+    Timeout: 30
+    Runtime: python3.11
+Resources:
+  VpcResourcesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: VpcResources
+      AttributeDefinitions:
+      - AttributeName: ResourceId
+        AttributeType: S
+      KeySchema:
+      - AttributeName: ResourceId
+        KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+  CognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: VPCAPIUserPool
+  CognitoUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: VPCAPIClient
+      UserPoolId:
+        Ref: CognitoUserPool
+      GenerateSecret: false
+  VpcApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: VpcApiGateway
+      StageName: dev
+      Auth:
+        DefaultAuthorizer: CognitoAuthorizer
+        Authorizers:
+          CognitoAuthorizer:
+            UserPoolArn:
+              Fn::GetAtt:
+              - CognitoUserPool
+              - Arn
+            Identity:
+              Header: Authorization
+              ValidationExpression: .*
+      EndpointConfiguration: REGIONAL
+      Cors:
+        AllowHeaders: '''Content-Type,Authorization'''
+        AllowMethods: '''OPTIONS,GET,POST'''
+        AllowOrigin: '''*'''
+  CreateVpcFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: CreateVpcFunction
+      Handler: app.create_vpc
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - AmazonEC2FullAccess
+      Environment:
+        Variables:
+          TABLE_NAME: VpcResources
+      Events:
+        CreateVpcAPI:
+          Type: Api
+          Properties:
+            RestApiId:
+              Ref: VpcApiGateway
+            Path: /vpc/create
+            Method: POST
+    Metadata:
+      SamResourceId: CreateVpcFunction
+  GetVpcFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: GetVpcFunction
+      Handler: app.get_resources
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      Environment:
+        Variables:
+          TABLE_NAME: VpcResources
+      Events:
+        GetVpcAPI:
+          Type: Api
+          Properties:
+            RestApiId:
+              Ref: VpcApiGateway
+            Path: /vpc/resources
+            Method: GET
+    Metadata:
+      SamResourceId: GetVpcFunction
