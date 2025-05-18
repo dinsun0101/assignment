@@ -50,3 +50,13 @@ Build & Deployment
   #####  sam build
 - run the below command to deploy the project that will deploy infra on AWS
   #####  sam deploy --guided
+## Test API
+Generate JWT Token for Cognito User
+step1 :
+aws cognito-idp initiate-auth \
+  --auth-flow USER_PASSWORD_AUTH \
+  --client-id <CLIENT_ID> \
+  --auth-parameters USERNAME=<USERNAME>,PASSWORD=<PASSWORD>
+ step2 : 
+
+ 
