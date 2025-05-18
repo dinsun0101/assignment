@@ -52,11 +52,28 @@ Build & Deployment
   #####  sam deploy --guided
 ## Test API
 Generate JWT Token for Cognito User
-step1 :
+- step1 : Out put give you session to create new password
 aws cognito-idp initiate-auth \
   --auth-flow USER_PASSWORD_AUTH \
   --client-id <CLIENT_ID> \
   --auth-parameters USERNAME=<USERNAME>,PASSWORD=<PASSWORD>
- step2 : 
+  
+ - step2 : after getting session update with new pawwsord
+   
+aws cognito-idp respond-to-auth-challenge \
+  --client-id <CLIENT_ID> \
+  --challenge-name NEW_PASSWORD_REQUIRED \
+  --challenge-responses USERNAME=<USERNAME>,NEW_PASSWORD=<NewSecurePassword> \
+  --session "<session-string>"
 
- 
+ this will give output as below
+ {
+    "AuthenticationResult": {
+        "AccessToken": "eyJraWQiOiJr...",
+        "ExpiresIn": 3600,
+        "IdToken": "eyJraWQiOiJq...",
+        "RefreshToken": "eyJjdHkiOiJKV1Q...",
+        "TokenType": "Bearer"
+    }
+}
+
