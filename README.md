@@ -19,7 +19,8 @@ vpc-api-project
 Creating an API that automates the creation of AWS VPCs with multiple subnets, securely stores results, and allows authenticated users to retrieve the resource data can be achieved using AWS serverless services such as AWS Lambda, Amazon API Gateway, Amazon DynamoDB, AWS IAM, and Amazon Cognito.
 
 
-   <img width="379" alt="image" src="https://github.com/user-attachments/assets/0c6d0139-d067-4ddb-a207-f38995f3ab60" />
+  <img width="430" alt="image" src="https://github.com/user-attachments/assets/124f475c-5b9d-4fb1-b7bf-75b3d5640bc8" />
+
 
 
                 
