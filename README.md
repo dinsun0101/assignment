@@ -70,7 +70,7 @@ aws cognito-idp respond-to-auth-challenge \
  
  <img width="284" alt="image" src="https://github.com/user-attachments/assets/5996037c-cf28-4650-b354-d04137fcb5fa" />
 
-## Open Postman to test API
+## Postman to test API
 - Open Postman
 - Create a new request
 - Set the method (e.g., GET, POST) and API Gateway endpoint URL
