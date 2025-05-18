@@ -28,11 +28,11 @@ Creating an API that automates the creation of AWS VPCs with multiple subnets, s
 Below is a high-level implementation and the Python code for this API:
 
 ## Explanation
-A client first log in via Cognito
-After successful login, Cognito returns an id_token to the client;
-The client sends a request to the API Gateway with the received id_token;
-The API Gateway verifies in Cognito whether the id_token is valid;
-Cognito will return to API Gateway a success response when the id_token is valid;
-The API Gateway sends the request to the lambda function;
-The lambda function executes and sends its response to the API Gateway;
-The API Gateway sends the response to the client.
+- A client first log in via Cognito
+- After successful login, Cognito returns an id_token to the client;
+- The client sends a request to the API Gateway with the received id_token;
+- The API Gateway verifies in Cognito whether the id_token is valid;
+- Cognito will return to API Gateway a success response when the id_token is valid;
+- The API Gateway sends the request to the lambda function;
+- The lambda function executes and store result to DynamoDB and sends its response to the API Gateway ;
+- The API Gateway sends the response to the client.
