@@ -67,6 +67,7 @@ aws cognito-idp respond-to-auth-challenge \
   --session "<session-string>"
 
  The abpve commaond will give output as below
+ 
  <img width="284" alt="image" src="https://github.com/user-attachments/assets/5996037c-cf28-4650-b354-d04137fcb5fa" />
 
 
