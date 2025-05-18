@@ -42,4 +42,11 @@ Below is a high-level implementation and the Python code for this API:
 Prerequisites
 - AWS CLI configured (aws configure)
 - AWS SAM CLI installed
- 
+Build & Deployment
+- Clone the repo
+- Navigate to the project directory
+  cd vpc-api-project
+- run the below command to build the project
+  sam build
+- run the below command to deploy the project that will deploy infra on AWS
+  sam deploy --guided
