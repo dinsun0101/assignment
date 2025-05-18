@@ -1,16 +1,17 @@
-# This project provides serverless APIs to create AWS VPCs with subnets and retrieve their details.
+#Project Overview: 
+This project provides serverless APIs to create AWS VPCs with subnets and retrieve their details.
+
 ## Features
 - Create VPCs with subnets using a POST API.
 - Retrieve details of created VPCs/subnets with a GET API.
 - Cognito-authenticated API Gateway for secure access.
 
 # Project folder structure
-vpc-api-project/
-│
-├── template.yaml         # AWS SAM template for infrastructure as code
-├── src/                  # Python Lambda source code
-│   ├── app.py            # Lambda Handlers (create_vpc and get_resources)
-│   └── requirements.txt  # Python dependencies
+vpc-api-project
+ - template.yaml         # AWS SAM template for infrastructure as code
+ - src/                  # Python Lambda source code
+    - app.py            # Lambda Handlers (create_vpc and get_resources)
+    - requirements.txt  # Python dependencies
 
 
 #Architecture
