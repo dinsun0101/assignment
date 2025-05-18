@@ -37,3 +37,9 @@ Below is a high-level implementation and the Python code for this API:
 - The API Gateway sends the request to the lambda function;
 - The lambda function executes and store result to DynamoDB and sends its response to the API Gateway ;
 - The API Gateway sends the response to the client.
+
+## Deploy API
+Prerequisites
+-------------------------------------------
+AWS CLI configured (aws configure)
+AWS SAM CLI installed
