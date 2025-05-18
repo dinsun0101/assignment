@@ -21,8 +21,8 @@ Creating an API that automates the creation of AWS VPCs with multiple subnets, s
 Below is a high-level implementation and the Python code for this API:
 
 #Components:
-API Gateway: Acts as the entry point for HTTP requests, handling authentication and routing to Lambda functions.
-AWS Lambda: Business logic to create VPCs, manage subnets, and store/retrieve data from DynamoDB.
-DynamoDB: Stores data about created VPCs and subnets.
-AWS Cognito: Manages authentication and secures the API.
+- API Gateway: Acts as the entry point for HTTP requests, handling authentication and routing to Lambda functions.
+- AWS Lambda: Business logic to create VPCs, manage subnets, and store/retrieve data from DynamoDB.
+- DynamoDB: Stores data about created VPCs and subnets.
+= AWS Cognito: Manages authentication and secures the API.
 
