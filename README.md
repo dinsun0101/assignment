@@ -40,7 +40,6 @@ Below is a high-level implementation and the Python code for this API:
 
 ## Deploy API
 Prerequisites
--------------------------------------------
 - AWS CLI configured (aws configure)
 - AWS SAM CLI installed
  
