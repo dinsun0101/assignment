@@ -75,5 +75,9 @@ aws cognito-idp respond-to-auth-challenge \
 - Create a new request
 - Set the method (e.g., GET, POST) and API Gateway endpoint URL
 - Go to the "Headers" tab and add this header:
-  Key: Authorization
-  Value: Bearer <your-jwt-token>
+  #### Key: Authorization
+  #### Value: Bearer <your-jwt-token>
+- Output
+<img width="344" alt="image" src="https://github.com/user-attachments/assets/718f2a43-6cd0-42f3-8403-1b12b98e2480" />
+
+    
