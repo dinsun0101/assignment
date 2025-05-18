@@ -66,14 +66,7 @@ aws cognito-idp respond-to-auth-challenge \
   --challenge-responses USERNAME=<USERNAME>,NEW_PASSWORD=<NewSecurePassword> \
   --session "<session-string>"
 
- this will give output as below
- {
-    "AuthenticationResult": {
-        "AccessToken": "eyJraWQiOiJr...",
-        "ExpiresIn": 3600,
-        "IdToken": "eyJraWQiOiJq...",
-        "RefreshToken": "eyJjdHkiOiJKV1Q...",
-        "TokenType": "Bearer"
-    }
-}
+ The abpve commaond will give output as below
+ <img width="284" alt="image" src="https://github.com/user-attachments/assets/5996037c-cf28-4650-b354-d04137fcb5fa" />
+
 
