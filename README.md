@@ -45,8 +45,8 @@ Prerequisites
 Build & Deployment
 - Clone the repo
 - Navigate to the project directory
-  cd vpc-api-project
+  #### cd vpc-api-project
 - run the below command to build the project
-  sam build
+  #### sam build
 - run the below command to deploy the project that will deploy infra on AWS
-  sam deploy --guided
+  #### sam deploy --guided
